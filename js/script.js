@@ -39,7 +39,8 @@ $(function() {
             $.post("ajax.php", {
                 'email': email,
                 'password': password,
-            }, requestComplete.bind($alertBlock))
+            }, requestComplete.bind($alertBlock),
+            "json")
             .fail(requestFail.bind($alertBlock));
 
         }
@@ -49,7 +50,7 @@ $(function() {
 
 
 function requestComplete(data) {
-
+	showError([data.message], this, false);
 }
 
 function requestFail(data) {
@@ -57,9 +58,14 @@ function requestFail(data) {
 }
 
 
-function showError(errors, alertBlock) {
-    alertBlock.empty();
+function showError(errors, alertBlock, danger=true) {
+    
+	alertBlock.removeClass("alert-success alert-danger");
+	alertBlock.addClass(danger?"alert-danger":"alert-success");
+	alertBlock.empty();
     alertBlock.show();
+  	
+
     let $ul = $("<ul></ul>");
     for (var i = 0; i < errors.length; i++) {
         $ul.append("<li>" + errors[i] + "</li>");
